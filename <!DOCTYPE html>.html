@@ -1,0 +1,314 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Demande d'Intervention - Maintenance Bâtiments</title>
+    
+    <!-- Intégration de Tailwind CSS pour le style rapide et responsive -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Configuration des couleurs personnalisées Tailwind basées sur votre logo (Rouge bordeaux) -->
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    colors: {
+                        'brand-red': '#c62030', /* Couleur approximative tirée de votre logo */
+                        'brand-red-light': '#e83b4d',
+                        'brand-red-dark': '#a11624',
+                    }
+                }
+            }
+        }
+    </script>
+
+    <!-- Inclusion de la bibliothèque EmailJS pour l'envoi d'emails depuis le client -->
+    <script type="text/javascript" src="https://cdn.jsdelivr.net/npm/@emailjs/browser@3/dist/email.min.js"></script>
+    <script type="text/javascript">
+        // Initialisation d'EmailJS avec VOTRE clé publique. 
+        (function() {
+            emailjs.init("CEstz_hKYpTakPlrN");
+        })();
+    </script>
+
+    <!-- Styles personnalisés pour des petits détails et animations -->
+    <style>
+        body {
+            background-color: #f3f4f6; /* Gris très clair pour le fond */
+            font-family: 'Inter', -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+        }
+
+        /* Personnalisation de la barre de défilement */
+        ::-webkit-scrollbar {
+            width: 8px;
+        }
+        ::-webkit-scrollbar-track {
+            background: #f1f1f1; 
+        }
+        ::-webkit-scrollbar-thumb {
+            background: #cbd5e1; 
+            border-radius: 4px;
+        }
+        ::-webkit-scrollbar-thumb:hover {
+            background: #94a3b8; 
+        }
+
+        /* Animation pour le message de succès */
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        .animate-fade-in {
+            animation: fadeIn 0.4s ease-out forwards;
+        }
+
+        /* Style des boutons radio personnalisés (Gravité) */
+        .radio-severity:checked + label {
+            border-color: currentColor;
+            background-color: currentColor;
+            color: white;
+        }
+        
+        /* Ajout d'une classe pour styliser le focus des champs avec la couleur de la marque */
+        .focus-brand-ring:focus {
+            outline: none;
+            border-color: #c62030; /* brand-red */
+            box-shadow: 0 0 0 2px rgba(198, 32, 48, 0.2);
+        }
+    </style>
+</head>
+<body class="min-h-screen flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+
+    <!-- Modification: Remplacement de border-gray-100 par border-brand-red et augmentation de la bordure -->
+    <div class="max-w-xl w-full space-y-8 bg-white p-10 rounded-2xl shadow-xl border-t-4 border-b-4 border-brand-red">
+        
+        <!-- En-tête avec Logo et Titre -->
+        <div class="text-center flex flex-col items-center">
+            <!-- Remplacement du src par le nom de l'image fourni dans le prompt -->
+            <img class="mx-auto h-24 w-auto object-contain mb-4" src="images.jpeg" alt="Logo de l'entreprise">
+            <h2 class="mt-2 text-3xl font-extrabold text-gray-900">
+                Demande d'Intervention
+            </h2>
+            <p class="mt-2 text-sm text-gray-600">
+                Veuillez remplir ce formulaire pour signaler un incident de maintenance dans les bâtiments.
+            </p>
+        </div>
+
+        <!-- Le Formulaire -->
+        <form id="maintenanceForm" class="mt-8 space-y-6">
+            <div class="rounded-md shadow-sm space-y-5">
+
+                <div>
+                    <label for="incidentType" class="block text-sm font-medium text-gray-700">Type d'incident <span class="text-brand-red">*</span></label>
+                    <!-- Modification: Remplacement des classes focus natives de Tailwind par la classe personnalisée focus-brand-ring et légère accentuation de la bordure par défaut -->
+                    <select id="incidentType" name="incident_type" required class="mt-1 block w-full pl-3 pr-10 py-3 text-base border-gray-300 border focus-brand-ring sm:text-sm rounded-md shadow-sm bg-gray-50 hover:border-gray-400 transition-colors">
+                        <option value="" disabled selected>Sélectionnez un type...</option>
+                        <option value="Plomberie">💧 Plomberie (Fuite, WC bouché, etc.)</option>
+                        <option value="Électricité">⚡ Électricité (Panne, ampoule, prise, etc.)</option>
+                        <option value="Dégradation">🔨 Dégradation (Vitre cassée, mur abîmé, etc.)</option>
+                        <option value="Climatisation/Chauffage">🌡️ Climatisation / Chauffage</option>
+                        <option value="Autre">❓ Autre (Précisez dans la description)</option>
+                    </select>
+                </div>
+
+                <div>
+                    <label class="block text-sm font-medium text-gray-700 mb-2">Niveau de gravité <span class="text-brand-red">*</span></label>
+                    <div class="grid grid-cols-3 gap-3">
+                        
+                        <!-- Faible -->
+                        <div class="relative flex items-center justify-center">
+                            <input type="radio" id="severity_low" name="severity" value="Faible" class="sr-only radio-severity text-green-600" required>
+                            <!-- Modification: Remplacement de border-gray-200 par hover:border-brand-red-light -->
+                            <label for="severity_low" class="flex flex-col items-center justify-center w-full p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 hover:border-brand-red-light transition-colors text-green-600">
+                                <span class="block text-sm font-semibold">Faible</span>
+                                <span class="block text-xs text-center mt-1 text-gray-500 opacity-80">Non urgent</span>
+                            </label>
+                        </div>
+                        
+                        <!-- Moyen -->
+                        <div class="relative flex items-center justify-center">
+                            <input type="radio" id="severity_medium" name="severity" value="Moyen" class="sr-only radio-severity text-yellow-500">
+                             <!-- Modification: Remplacement de border-gray-200 par hover:border-brand-red-light -->
+                            <label for="severity_medium" class="flex flex-col items-center justify-center w-full p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 hover:border-brand-red-light transition-colors text-yellow-500">
+                                <span class="block text-sm font-semibold">Moyen</span>
+                                <span class="block text-xs text-center mt-1 text-gray-500 opacity-80">Gênant</span>
+                            </label>
+                        </div>
+
+                        <!-- Élevé -->
+                        <div class="relative flex items-center justify-center">
+                            <input type="radio" id="severity_high" name="severity" value="Élevé" class="sr-only radio-severity text-brand-red">
+                             <!-- Modification: Remplacement de border-gray-200 par hover:border-brand-red-light -->
+                            <label for="severity_high" class="flex flex-col items-center justify-center w-full p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 hover:border-brand-red-light transition-colors text-brand-red">
+                                <span class="block text-sm font-semibold">Élevé</span>
+                                <span class="block text-xs text-center mt-1 text-gray-500 opacity-80">Urgent/Bloquant</span>
+                            </label>
+                        </div>
+                    </div>
+                </div>
+
+                <div>
+                    <label for="location" class="block text-sm font-medium text-gray-700">Salle <span class="text-brand-red">*</span></label>
+                    <!-- Modification: Utilisation de focus-brand-ring et hover:border-gray-400 -->
+                    <input type="text" name="location" id="location" required placeholder="Ex: Salle de réunion, Bureau 204..." class="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus-brand-ring sm:text-sm bg-gray-50 hover:border-gray-400 transition-colors">
+                </div>
+
+                <div>
+                    <label for="description" class="block text-sm font-medium text-gray-700">Description détaillée du problème <span class="text-brand-red">*</span></label>
+                    <textarea id="description" name="description" rows="4" required placeholder="Décrivez le problème le plus précisément possible..." class="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus-brand-ring sm:text-sm bg-gray-50 resize-y hover:border-gray-400 transition-colors"></textarea>
+                </div>
+
+                <div class="pt-4 border-t border-gray-200">
+                    <h3 class="text-lg font-medium text-gray-900 mb-4">Vos informations</h3>
+                    
+                    <div class="grid grid-cols-1 gap-y-4 sm:grid-cols-2 sm:gap-x-4">
+                        <div>
+                            <label for="declarantName" class="block text-sm font-medium text-gray-700">Nom complet <span class="text-brand-red">*</span></label>
+                             <!-- Modification: Utilisation de focus-brand-ring et hover:border-gray-400 -->
+                            <input type="text" name="user_name" id="declarantName" required class="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus-brand-ring sm:text-sm bg-gray-50 hover:border-gray-400 transition-colors">
+                        </div>
+                        <div>
+                            <label for="declarantEmail" class="block text-sm font-medium text-gray-700">Adresse Email <span class="text-brand-red">*</span></label>
+                             <!-- Modification: Utilisation de focus-brand-ring et hover:border-gray-400 -->
+                            <input type="email" name="user_email" id="declarantEmail" required placeholder="pour vous recontacter" class="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus-brand-ring sm:text-sm bg-gray-50 hover:border-gray-400 transition-colors">
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <div>
+                <button type="submit" id="submitBtn" class="group relative w-full flex justify-center py-3 px-4 border border-transparent text-sm font-medium rounded-md text-white bg-brand-red hover:bg-brand-red-dark focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-brand-red transition-colors duration-200">
+                    <span class="absolute left-0 inset-y-0 flex items-center pl-3">
+                        <!-- Icône envoyer -->
+                        <svg class="h-5 w-5 text-brand-red-light group-hover:text-red-300 transition-colors" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path d="M10.894 2.553a1 1 0 00-1.788 0l-7 14a1 1 0 001.169 1.409l5-1.429A1 1 0 009 15.571V11a1 1 0 112 0v4.571a1 1 0 00.725.962l5 1.428a1 1 0 001.17-1.408l-7-14z" />
+                        </svg>
+                    </span>
+                    <span id="btnText">Envoyer la demande</span>
+                    
+                    <!-- Spinner de chargement (caché par défaut) -->
+                    <svg id="loadingSpinner" class="hidden animate-spin ml-3 h-5 w-5 text-white" xmlns="http://www.w3.org/2000/svg" fill="none" viewBox="0 0 24 24">
+                        <circle class="opacity-25" cx="12" cy="12" r="10" stroke="currentColor" stroke-width="4"></circle>
+                        <path class="opacity-75" fill="currentColor" d="M4 12a8 8 0 018-8V0C5.373 0 0 5.373 0 12h4zm2 5.291A7.962 7.962 0 014 12H0c0 3.042 1.135 5.824 3 7.938l3-2.647z"></path>
+                    </svg>
+                </button>
+            </div>
+
+            <!-- Message de succès (caché par défaut) -->
+            <div id="successMessage" class="hidden rounded-md bg-green-50 p-4 animate-fade-in border border-green-200">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-green-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zm3.707-9.293a1 1 0 00-1.414-1.414L9 10.586 7.707 9.293a1 1 0 00-1.414 1.414l2 2a1 1 0 001.414 0l4-4z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-medium text-green-800">Demande envoyée avec succès</h3>
+                        <div class="mt-2 text-sm text-green-700">
+                            <p>Votre ticket a bien été transmis au service de maintenance. Un email récapitulatif vous a été envoyé (simulation).</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Message d'erreur (caché par défaut) -->
+            <div id="errorMessage" class="hidden rounded-md bg-red-50 p-4 animate-fade-in border border-red-200">
+                <div class="flex">
+                    <div class="flex-shrink-0">
+                        <svg class="h-5 w-5 text-red-400" xmlns="http://www.w3.org/2000/svg" viewBox="0 0 20 20" fill="currentColor" aria-hidden="true">
+                            <path fill-rule="evenodd" d="M10 18a8 8 0 100-16 8 8 0 000 16zM8.707 7.293a1 1 0 00-1.414 1.414L8.586 10l-1.293 1.293a1 1 0 101.414 1.414L10 11.414l1.293 1.293a1 1 0 001.414-1.414L11.414 10l1.293-1.293a1 1 0 00-1.414-1.414L10 8.586 8.707 7.293z" clip-rule="evenodd" />
+                        </svg>
+                    </div>
+                    <div class="ml-3">
+                        <h3 class="text-sm font-medium text-red-800">Erreur lors de l'envoi</h3>
+                        <div class="mt-2 text-sm text-red-700">
+                            <p id="errorText">Une erreur s'est produite. Veuillez réessayer plus tard.</p>
+                        </div>
+                    </div>
+                </div>
+            </div>
+            
+            <!-- NOUVEAU: Champ caché pour envoyer la date avec sendForm -->
+            <input type="hidden" name="date" id="hiddenDate">
+            
+        </form>
+    </div>
+
+    <script>
+        document.addEventListener('DOMContentLoaded', function() {
+            const form = document.getElementById('maintenanceForm');
+            const submitBtn = document.getElementById('submitBtn');
+            const btnText = document.getElementById('btnText');
+            const loadingSpinner = document.getElementById('loadingSpinner');
+            const successMessage = document.getElementById('successMessage');
+            const errorMessage = document.getElementById('errorMessage');
+            const errorText = document.getElementById('errorText');
+
+            form.addEventListener('submit', function(event) {
+                event.preventDefault(); // Empêche le rechargement de la page
+
+                // 2. Remplissage du champ caché pour la date
+                document.getElementById('hiddenDate').value = new Date().toLocaleDateString('fr-FR', { day: '2-digit', month: 'long', year: 'numeric', hour: '2-digit', minute:'2-digit' });
+
+                // 3. Mise à jour de l'UI pour montrer le chargement
+                submitBtn.disabled = true;
+                submitBtn.classList.add('opacity-75', 'cursor-not-allowed');
+                btnText.textContent = 'Envoi en cours...';
+                loadingSpinner.classList.remove('hidden');
+                successMessage.classList.add('hidden');
+                errorMessage.classList.add('hidden');
+
+                // 4. ENVOI DE L'EMAIL VIA EMAILJS
+                const serviceID = 'service_otrz8os'; 
+                const templateID = 'template_u7xu44n';
+
+                // Modification: Utilisation de sendForm au lieu de send pour supporter les fichiers
+                emailjs.sendForm(serviceID, templateID, form)
+                    .then(function(response) {
+                        console.log('SUCCESS!', response.status, response.text);
+                        handleSuccess();
+                    }, function(error) {
+                        console.log('FAILED...', error);
+                        handleError("L'envoi de l'email a échoué. Vérifiez votre connexion internet.");
+                    });
+            });
+
+            // Fonctions utilitaires pour gérer l'état de l'interface
+            function handleSuccess() {
+                // Rétablir le bouton
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+                btnText.textContent = 'Envoyer la demande';
+                loadingSpinner.classList.add('hidden');
+                
+                // Afficher le message de succès
+                successMessage.classList.remove('hidden');
+                
+                // Réinitialiser le formulaire
+                form.reset();
+                
+                // Faire défiler vers le message de succès (utile sur mobile)
+                successMessage.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+                
+                // Cacher le message de succès après 10 secondes
+                setTimeout(() => {
+                    successMessage.classList.add('hidden');
+                }, 10000);
+            }
+
+            function handleError(message) {
+                // Rétablir le bouton
+                submitBtn.disabled = false;
+                submitBtn.classList.remove('opacity-75', 'cursor-not-allowed');
+                btnText.textContent = 'Réessayer';
+                loadingSpinner.classList.add('hidden');
+                
+                // Afficher l'erreur
+                errorText.textContent = message;
+                errorMessage.classList.remove('hidden');
+            }
+        });
+    </script>
+</body>
+</html>
