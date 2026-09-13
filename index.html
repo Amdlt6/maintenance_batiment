@@ -78,16 +78,18 @@
         }
     </style>
 </head>
-<body class="min-h-screen flex flex-col items-center justify-center py-12 px-4 sm:px-6 lg:px-8">
+<!-- Modification: Ajustement des marges verticales pour mobile (py-6) et ordi (sm:py-12) -->
+<body class="min-h-screen flex flex-col items-center justify-center py-6 sm:py-12 px-4 sm:px-6 lg:px-8">
 
-    <!-- Modification: Remplacement de border-gray-100 par border-brand-red et augmentation de la bordure -->
-    <div class="max-w-xl w-full space-y-8 bg-white p-10 rounded-2xl shadow-xl border-t-4 border-b-4 border-brand-red">
+    <!-- Modification: Ajustement des espacements (p-6 sur mobile, sm:p-10 sur ordi) pour gagner de la place sur téléphone -->
+    <div class="max-w-xl w-full space-y-6 sm:space-y-8 bg-white p-6 sm:p-10 rounded-2xl shadow-xl border-t-4 border-b-4 border-brand-red">
         
         <!-- En-tête avec Logo et Titre -->
         <div class="text-center flex flex-col items-center">
-            <!-- Remplacement du src par le nom de l'image fourni dans le prompt -->
-            <img class="mx-auto h-24 w-auto object-contain mb-4" src="images.jpeg" alt="Logo de l'entreprise">
-            <h2 class="mt-2 text-3xl font-extrabold text-gray-900">
+            <!-- Modification: Logo plus compact sur mobile (h-16) et normal sur ordi (sm:h-20) -->
+            <img class="mx-auto h-16 sm:h-20 w-auto object-contain mb-2 sm:mb-4" src="images.jpeg" alt="Logo de l'entreprise">
+            <!-- Modification: Titre adapté à la taille de l'écran -->
+            <h2 class="mt-2 text-2xl sm:text-3xl font-extrabold text-gray-900">
                 Demande d'Intervention
             </h2>
             <p class="mt-2 text-sm text-gray-600">
@@ -96,12 +98,11 @@
         </div>
 
         <!-- Le Formulaire -->
-        <form id="maintenanceForm" class="mt-8 space-y-6" enctype="multipart/form-data">
+        <form id="maintenanceForm" class="mt-8 space-y-6">
             <div class="rounded-md shadow-sm space-y-5">
 
                 <div>
                     <label for="incidentType" class="block text-sm font-medium text-gray-700">Type d'incident <span class="text-brand-red">*</span></label>
-                    <!-- Modification: Remplacement des classes focus natives de Tailwind par la classe personnalisée focus-brand-ring et légère accentuation de la bordure par défaut -->
                     <select id="incidentType" name="incident_type" required class="mt-1 block w-full pl-3 pr-10 py-3 text-base border-gray-300 border focus-brand-ring sm:text-sm rounded-md shadow-sm bg-gray-50 hover:border-gray-400 transition-colors">
                         <option value="" disabled selected>Sélectionnez un type...</option>
                         <option value="Plomberie">💧 Plomberie (Fuite, WC bouché, etc.)</option>
@@ -114,35 +115,36 @@
 
                 <div>
                     <label class="block text-sm font-medium text-gray-700 mb-2">Niveau de gravité <span class="text-brand-red">*</span></label>
-                    <div class="grid grid-cols-3 gap-3">
+                    <!-- Modification: Les boutons restent en 3 colonnes, mais l'espacement entre eux est réduit sur mobile -->
+                    <div class="grid grid-cols-3 gap-2 sm:gap-3">
                         
                         <!-- Faible -->
                         <div class="relative flex items-center justify-center">
                             <input type="radio" id="severity_low" name="severity" value="Faible" class="sr-only radio-severity text-green-600" required>
-                            <!-- Modification: Remplacement de border-gray-200 par hover:border-brand-red-light -->
-                            <label for="severity_low" class="flex flex-col items-center justify-center w-full p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 hover:border-brand-red-light transition-colors text-green-600">
-                                <span class="block text-sm font-semibold">Faible</span>
-                                <span class="block text-xs text-center mt-1 text-gray-500 opacity-80">Non urgent</span>
+                            <!-- Modification: Padding et taille de texte dynamiques pour éviter les débordements sur petits écrans -->
+                            <label for="severity_low" class="flex flex-col items-center justify-center w-full p-2 sm:p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 hover:border-brand-red-light transition-colors text-green-600 text-center">
+                                <span class="block text-xs sm:text-sm font-semibold">Faible</span>
+                                <span class="block text-[10px] sm:text-xs mt-1 text-gray-500 opacity-80 leading-tight">Non urgent</span>
                             </label>
                         </div>
                         
                         <!-- Moyen -->
                         <div class="relative flex items-center justify-center">
                             <input type="radio" id="severity_medium" name="severity" value="Moyen" class="sr-only radio-severity text-yellow-500">
-                             <!-- Modification: Remplacement de border-gray-200 par hover:border-brand-red-light -->
-                            <label for="severity_medium" class="flex flex-col items-center justify-center w-full p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 hover:border-brand-red-light transition-colors text-yellow-500">
-                                <span class="block text-sm font-semibold">Moyen</span>
-                                <span class="block text-xs text-center mt-1 text-gray-500 opacity-80">Gênant</span>
+                            <!-- Modification: Padding et taille de texte dynamiques -->
+                            <label for="severity_medium" class="flex flex-col items-center justify-center w-full p-2 sm:p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 hover:border-brand-red-light transition-colors text-yellow-500 text-center">
+                                <span class="block text-xs sm:text-sm font-semibold">Moyen</span>
+                                <span class="block text-[10px] sm:text-xs mt-1 text-gray-500 opacity-80 leading-tight">Gênant</span>
                             </label>
                         </div>
 
                         <!-- Élevé -->
                         <div class="relative flex items-center justify-center">
                             <input type="radio" id="severity_high" name="severity" value="Élevé" class="sr-only radio-severity text-brand-red">
-                             <!-- Modification: Remplacement de border-gray-200 par hover:border-brand-red-light -->
-                            <label for="severity_high" class="flex flex-col items-center justify-center w-full p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 hover:border-brand-red-light transition-colors text-brand-red">
-                                <span class="block text-sm font-semibold">Élevé</span>
-                                <span class="block text-xs text-center mt-1 text-gray-500 opacity-80">Urgent/Bloquant</span>
+                            <!-- Modification: Padding et taille de texte dynamiques -->
+                            <label for="severity_high" class="flex flex-col items-center justify-center w-full p-2 sm:p-3 border-2 border-gray-200 rounded-lg cursor-pointer hover:bg-gray-50 hover:border-brand-red-light transition-colors text-brand-red text-center">
+                                <span class="block text-xs sm:text-sm font-semibold">Élevé</span>
+                                <span class="block text-[10px] sm:text-xs mt-1 text-gray-500 opacity-80 leading-tight">Urgent/Bloquant</span>
                             </label>
                         </div>
                     </div>
@@ -157,26 +159,6 @@
                 <div>
                     <label for="description" class="block text-sm font-medium text-gray-700">Description détaillée du problème <span class="text-brand-red">*</span></label>
                     <textarea id="description" name="description" rows="4" required placeholder="Décrivez le problème le plus précisément possible..." class="mt-1 block w-full px-3 py-3 border border-gray-300 rounded-md shadow-sm focus-brand-ring sm:text-sm bg-gray-50 resize-y hover:border-gray-400 transition-colors"></textarea>
-                </div>
-
-                <!-- Zone d'ajout de photo avec compression automatique -->
-                <div>
-                    <label class="block text-sm font-medium text-gray-700 mb-2">Photo de l'incident (Optionnel)</label>
-                    <div class="mt-1 flex justify-center px-6 pt-5 pb-6 border-2 border-gray-300 border-dashed rounded-md hover:border-brand-red-light transition-colors bg-gray-50" id="dropZone">
-                        <div class="space-y-1 text-center">
-                            <svg class="mx-auto h-12 w-12 text-gray-400" stroke="currentColor" fill="none" viewBox="0 0 48 48" aria-hidden="true">
-                                <path d="M28 8H12a4 4 0 00-4 4v20m32-12v8m0 0v8a4 4 0 01-4 4H12a4 4 0 01-4-4v-4m32-4l-3.172-3.172a4 4 0 00-5.656 0L28 28M8 32l9.172-9.172a4 4 0 015.656 0L28 28m0 0l4 4m4-24h8m-4-4v8m-12 4h.02" stroke-width="2" stroke-linecap="round" stroke-linejoin="round" />
-                            </svg>
-                            <div class="flex text-sm text-gray-600 justify-center">
-                                <label for="photo" class="relative cursor-pointer bg-white rounded-md font-medium text-brand-red hover:text-brand-red-dark focus-within:outline-none focus-within:ring-2 focus-within:ring-offset-2 focus-within:ring-brand-red">
-                                    <span id="photoLabel">Ajouter une photo</span>
-                                    <!-- L'attribut name="my_file" permet à EmailJS de l'identifier comme pièce jointe -->
-                                    <input id="photo" name="my_file" type="file" accept="image/*" class="sr-only">
-                                </label>
-                            </div>
-                            <p class="text-xs text-gray-500 mt-2" id="photoHelp">L'image sera automatiquement compressée pour l'envoi.</p>
-                        </div>
-                    </div>
                 </div>
 
                 <div class="pt-4 border-t border-gray-200">
@@ -264,109 +246,6 @@
             const successMessage = document.getElementById('successMessage');
             const errorMessage = document.getElementById('errorMessage');
             const errorText = document.getElementById('errorText');
-
-            const photoInput = document.getElementById('photo');
-            const photoLabel = document.getElementById('photoLabel');
-            const photoHelp = document.getElementById('photoHelp');
-
-            // Logique de compression d'image côté client (dans le navigateur)
-            if(photoInput) {
-                photoInput.addEventListener('change', async function(e) {
-                    const file = e.target.files[0];
-                    if (!file) return;
-
-                    // Vérifie que c'est bien une image
-                    if (!file.type.match('image.*')) {
-                        alert("Veuillez sélectionner un fichier image valide.");
-                        photoInput.value = '';
-                        return;
-                    }
-
-                    // Modifier l'UI pendant la compression
-                    photoLabel.textContent = "Compression en cours...";
-                    photoHelp.textContent = "Veuillez patienter...";
-                    submitBtn.disabled = true;
-                    submitBtn.classList.add('opacity-50', 'cursor-not-allowed');
-
-                    try {
-                        // Appeler la fonction de compression
-                        const compressedFile = await compressImage(file);
-                        
-                        // Remplacer "secrètement" le fichier lourd par le fichier léger dans le formulaire
-                        const dataTransfer = new DataTransfer();
-                        dataTransfer.items.add(compressedFile);
-                        photoInput.files = dataTransfer.files;
-
-                        // Mettre à jour l'affichage
-                        const sizeKo = (compressedFile.size / 1024).toFixed(1);
-                        photoLabel.textContent = "Photo prête !";
-                        photoHelp.textContent = `Taille optimisée : ${sizeKo} Ko (Prêt pour l'envoi)`;
-                        photoHelp.classList.remove('text-gray-500');
-                        photoHelp.classList.add('text-green-600', 'font-medium');
-                        
-                    } catch (err) {
-                        console.error("Erreur de compression:", err);
-                        photoLabel.textContent = "Erreur de compression";
-                        photoHelp.textContent = "L'image n'a pas pu être compressée, l'envoi risque d'échouer.";
-                        photoHelp.classList.add('text-red-600');
-                    } finally {
-                        submitBtn.disabled = false;
-                        submitBtn.classList.remove('opacity-50', 'cursor-not-allowed');
-                    }
-                });
-            }
-
-            // Fonction pour réduire la résolution et la qualité de l'image (HTML5 Canvas)
-            function compressImage(file) {
-                return new Promise((resolve, reject) => {
-                    const reader = new FileReader();
-                    reader.readAsDataURL(file);
-                    reader.onload = (event) => {
-                        const img = new Image();
-                        img.src = event.target.result;
-                        img.onload = () => {
-                            const canvas = document.createElement('canvas');
-                            let width = img.width;
-                            let height = img.height;
-
-                            // On réduit drastiquement la taille (max 500px de large/haut) pour garantir < 50ko
-                            const MAX_DIMENSION = 500;
-
-                            if (width > height) {
-                                if (width > MAX_DIMENSION) {
-                                    height *= MAX_DIMENSION / width;
-                                    width = MAX_DIMENSION;
-                                }
-                            } else {
-                                if (height > MAX_DIMENSION) {
-                                    width *= MAX_DIMENSION / height;
-                                    height = MAX_DIMENSION;
-                                }
-                            }
-
-                            canvas.width = width;
-                            canvas.height = height;
-                            const ctx = canvas.getContext('2d');
-                            ctx.drawImage(img, 0, 0, width, height);
-
-                            // Compression en JPEG avec une qualité réduite à 30% (0.3) pour garantir < 50ko
-                            canvas.toBlob((blob) => {
-                                if(blob) {
-                                    const newFile = new File([blob], "photo_compressee.jpg", {
-                                        type: "image/jpeg",
-                                        lastModified: Date.now()
-                                    });
-                                    resolve(newFile);
-                                } else {
-                                    reject(new Error("Erreur de création du fichier compressé."));
-                                }
-                            }, 'image/jpeg', 0.4);
-                        };
-                        img.onerror = () => reject(new Error("Impossible de lire l'image."));
-                    };
-                    reader.onerror = () => reject(new Error("Erreur de chargement du fichier."));
-                });
-            }
 
             form.addEventListener('submit', function(event) {
                 event.preventDefault(); // Empêche le rechargement de la page
